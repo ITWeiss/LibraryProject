@@ -5,11 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.libraryProject.config.PostgresDbTestcontainers;
 import com.example.libraryProject.entity.Book;
-import com.example.libraryProject.restController.BookController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 /**
@@ -21,19 +25,23 @@ import java.util.List;
 @DisplayName("Тестирование контроллера для работы с книгами")
 public class TestBookController extends PostgresDbTestcontainers {
 
-
   @Autowired
-  private BookController bookController;
+  private TestRestTemplate restTemplate;
 
   @Test
-  @DisplayName("Получение всех задач")
-  void testGetAllTasks() {
+  @DisplayName("Получение всех книг")
+  void testGetAllBooks() {
 
-    List<Book> books = bookController.getAllBooks();
-
+    ResponseEntity<List<Book>> books = restTemplate.exchange(
+        "http://localhost:8080/books",
+        HttpMethod.GET,
+        null,
+        new ParameterizedTypeReference<List<Book>>(){}
+    );
+    assertEquals(HttpStatus.OK, books.getStatusCode());
+    List<Book> booksBody = books.getBody();
     assertThat(books).isNotNull();
-    assertEquals(3, books.size());
+    assertEquals(3, booksBody.size());
   }
-
 
 }

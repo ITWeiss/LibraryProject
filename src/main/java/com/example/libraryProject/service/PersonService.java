@@ -3,6 +3,7 @@ package com.example.libraryProject.service;
 import com.example.libraryProject.entity.Person;
 import com.example.libraryProject.repository.BookRepository;
 import com.example.libraryProject.repository.PersonRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class PersonService {
   /**
    * Создать пользователя
    */
+  @Transactional
   public void createUser(Person person) {
     if (personRepository.findByName(person.getName()).isEmpty()) {
       person.setPassword(passwordEncoder.encode(person.getPassword()));
@@ -35,6 +37,7 @@ public class PersonService {
   /**
    * Получить пользователя по имени
    */
+  @Transactional
   public Optional<Person> getUser(Person person) {
     if (bookRepository.findByName(person.getName()).isPresent()) {
       return personRepository.findByName(person.getName());

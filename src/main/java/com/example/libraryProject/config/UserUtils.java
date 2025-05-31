@@ -1,5 +1,6 @@
 package com.example.libraryProject.config;
 
+import com.example.libraryProject.entity.Person;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
@@ -23,10 +24,14 @@ public class UserUtils {
   }
 
   /**
-   * Получение текущего времени
+   * Получение идентификатора текущего пользователя
    */
-  public static LocalDateTime getCurrentTime() {
-    return LocalDateTime.now();
+  public static Long getCurrentUserId() {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (principal instanceof UserDetails userDetails) {
+      return ((Person) userDetails).getId();
+    }
+    throw new IllegalStateException("Unable to determine current user");
   }
 }
 

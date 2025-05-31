@@ -7,8 +7,9 @@ CREATE TABLE books(
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     removed_at TIMESTAMP,
-    created_user varchar(255),
+    created_user INTEGER REFERENCES users(id),
     updated_user varchar(255),
     removed_user varchar(255),
+    person_id integer references persons(id)
     constraint pk_books primary key (id)
 );

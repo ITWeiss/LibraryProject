@@ -1,6 +1,7 @@
 package com.example.libraryProject.restController;
 
 import com.example.libraryProject.entity.Book;
+import com.example.libraryProject.exception.BookNotFoundException;
 import com.example.libraryProject.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Контроллер для работы с книгами
@@ -35,15 +35,15 @@ public class BookController {
    * Получение списка всех книг
    */
   @GetMapping
-  public List<Book> getAllBooks() {
-    return bookService.getAllBooks();
+  public ResponseEntity<List<Book>> getAllBooks() {
+    return ResponseEntity.ok(bookService.getAllBooks());
   }
 
   /**
    * Получение книги по её id
    */
   @GetMapping("/{id}")
-  public ResponseEntity<Optional<Book>> getBookById(@PathVariable Long id) {
+  public ResponseEntity<Book> getBookById(@PathVariable Long id) {
     return ResponseEntity.ok(bookService.getBookById(id));
   }
 
@@ -52,7 +52,6 @@ public class BookController {
    */
   @GetMapping("/coverBook/{id}")
   public ResponseEntity<String> getBookCoverById(@PathVariable Long id) {
-    Book book = bookService.getBookById(id).orElse(null);
     return ResponseEntity.ok(bookService.getBookCover(id));
   }
 
@@ -60,10 +59,10 @@ public class BookController {
    * Метод для назначения книги пользователю
    */
   @PostMapping("/assign/{id}")
-  public ResponseEntity<String> assignBookToCurrentUser(@PathVariable("id") Long bookId) {
+  public ResponseEntity<Void> assignBookToCurrentUser(@PathVariable("id") Long bookId) {
     log.info("Received request to assign book with id {}", bookId);
     bookService.assignBookToCurrentUser(bookId);
-    return ResponseEntity.ok("Book successfully assigned to current user");
+    return ResponseEntity.ok().build();
 
   }
 
@@ -72,10 +71,11 @@ public class BookController {
    */
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping
-  public ResponseEntity<Void> createBook(@RequestBody Book book) {
+  public ResponseEntity<Book> createBook(@RequestBody Book book) {
     bookService.addBook(book);
+    URI location = URI.create("/books/" + book.getId());
     return ResponseEntity
-        .created(URI.create("/books/" + book.getId()))
+        .created(location)
         .build();
   }
 
@@ -94,7 +94,7 @@ public class BookController {
    */
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("/{id}")
-  public ResponseEntity<Void> updateBookById(@PathVariable Long id, @RequestBody Book book) {
+  public ResponseEntity<Book> updateBookById(@PathVariable Long id, @RequestBody Book book) {
     bookService.updateBook(id, book);
     return ResponseEntity.ok().build();
   }

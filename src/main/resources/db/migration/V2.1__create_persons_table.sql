@@ -8,7 +8,7 @@ CREATE TABLE persons (
     roles VARCHAR(255),
     created_at TIMESTAMP,
     removed_at TIMESTAMP,
-    created_user VARCHAR(255),
+    created_user INTEGER REFERENCES users(id),
     removed_user VARCHAR(255),
     books TEXT[],
     CONSTRAINT pk_user PRIMARY KEY (id)
