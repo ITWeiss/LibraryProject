@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -94,9 +93,9 @@ public class BookService {
     if (book.getOwner() != null) {
       throw new BookAlreadyAssignedException(book.getOwner().getName());
     }
-    String username = UserUtils.getCurrentUsername();
-    Person owner = personRepository.findByName(username)
-        .orElseThrow(() -> new UserNotFoundException(username));
+    Long currentUserId = UserUtils.getCurrentUserId();
+    Person owner = personRepository.findById(currentUserId)
+        .orElseThrow(() -> new UserNotFoundException("User not found"));
     book.setOwner(owner);
     repository.save(book);
   }

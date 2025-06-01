@@ -7,6 +7,6 @@ package com.example.libraryProject.exception;
  */
 public class BookNotFoundException extends RuntimeException {
   public BookNotFoundException(Long id) {
-    super("Книга с ID " + id + " не найдена");
+    super(String.format("Book with ID %d not found", id));
   }
 }

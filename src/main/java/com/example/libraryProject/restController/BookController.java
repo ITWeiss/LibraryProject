@@ -1,7 +1,6 @@
 package com.example.libraryProject.restController;
 
 import com.example.libraryProject.entity.Book;
-import com.example.libraryProject.exception.BookNotFoundException;
 import com.example.libraryProject.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

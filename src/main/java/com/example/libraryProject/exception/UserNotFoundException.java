@@ -7,6 +7,6 @@ package com.example.libraryProject.exception;
  */
 public class UserNotFoundException extends RuntimeException {
   public UserNotFoundException(String username) {
-    super("User with name " + username + " not found");
+    super(String.format("User with name %s not found", username));
   }
 }

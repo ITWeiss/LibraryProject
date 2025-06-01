@@ -42,7 +42,7 @@ public class Book {
   private String updatedPerson;
   private String removedPerson;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "owner_id")
   private Person owner;
 }

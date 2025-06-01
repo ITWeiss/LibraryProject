@@ -7,6 +7,6 @@ package com.example.libraryProject.exception;
  */
 public class BookAlreadyAssignedException extends RuntimeException {
   public BookAlreadyAssignedException(String ownerName) {
-    super("Book is already assigned to " + ownerName);
+    super(String.format("Book is already assigned to %s", ownerName));
   }
 }

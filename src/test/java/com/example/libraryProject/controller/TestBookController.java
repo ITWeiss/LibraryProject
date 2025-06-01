@@ -10,11 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import java.util.List;
 
 /**
  * Класс для тестирования контроллера для работы с книгами
@@ -32,16 +30,14 @@ public class TestBookController extends PostgresDbTestcontainers {
   @DisplayName("Получение всех книг")
   void testGetAllBooks() {
 
-    ResponseEntity<List<Book>> books = restTemplate.exchange(
+    ResponseEntity<Book[]> books = restTemplate.getForEntity(
         "http://localhost:8080/books",
-        HttpMethod.GET,
-        null,
-        new ParameterizedTypeReference<List<Book>>(){}
+        Book[].class
     );
     assertEquals(HttpStatus.OK, books.getStatusCode());
-    List<Book> booksBody = books.getBody();
-    assertThat(books).isNotNull();
-    assertEquals(3, booksBody.size());
+    Book[] booksArray = books.getBody();
+    assertThat(booksArray).isNotNull();
+    assertEquals(3, booksArray.length);
   }
 
 }

@@ -1,13 +1,14 @@
 package com.example.libraryProject.service;
 
 import com.example.libraryProject.entity.Person;
+import com.example.libraryProject.exception.UserAlreadyExistsException;
+import com.example.libraryProject.exception.UserNotFoundException;
 import com.example.libraryProject.repository.BookRepository;
 import com.example.libraryProject.repository.PersonRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 /**
  * Сервис для работы с пользователями
@@ -28,21 +29,19 @@ public class PersonService {
    */
   @Transactional
   public void createUser(Person person) {
-    if (personRepository.findByName(person.getName()).isEmpty()) {
-      person.setPassword(passwordEncoder.encode(person.getPassword()));
-      personRepository.save(person);
+    if (personRepository.findByName(person.getName()).isPresent()) {
+      throw new UserAlreadyExistsException("User with the same details already exists");
     }
+    person.setPassword(passwordEncoder.encode(person.getPassword()));
+    personRepository.save(person);
   }
 
   /**
    * Получить пользователя по имени
    */
   @Transactional
-  public Optional<Person> getUser(Person person) {
-    if (bookRepository.findByName(person.getName()).isPresent()) {
-      return personRepository.findByName(person.getName());
-    } else {
-      return Optional.empty();
-    }
+  public Person getUser(Person person) {
+    return personRepository.findByName(person.getName())
+        .orElseThrow(() -> new UserNotFoundException("User not found"));
   }
 }
