@@ -35,6 +35,7 @@ public class BookController {
    */
   @GetMapping
   public ResponseEntity<List<Book>> getAllBooks() {
+    log.debug("Received request to get all books");
     return ResponseEntity.ok(bookService.getAllBooks());
   }
 
@@ -43,6 +44,7 @@ public class BookController {
    */
   @GetMapping("/{id}")
   public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+    log.debug("Received request to get book with id {}", id);
     return ResponseEntity.ok(bookService.getBookById(id));
   }
 
@@ -51,6 +53,7 @@ public class BookController {
    */
   @GetMapping("/coverBook/{id}")
   public ResponseEntity<String> getBookCoverById(@PathVariable Long id) {
+    log.debug("Received request to get book cover with id {}", id);
     return ResponseEntity.ok(bookService.getBookCover(id));
   }
 
@@ -71,6 +74,7 @@ public class BookController {
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping
   public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    log.debug("Received request to create book {}", book);
     bookService.addBook(book);
     URI location = URI.create("/books/" + book.getId());
     return ResponseEntity
@@ -84,6 +88,7 @@ public class BookController {
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteBookById(@PathVariable Long id) {
+    log.debug("Received request to delete book with id {}", id);
     bookService.deleteBookById(id);
     return ResponseEntity.noContent().build();
   }
@@ -94,6 +99,7 @@ public class BookController {
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("/{id}")
   public ResponseEntity<Book> updateBookById(@PathVariable Long id, @RequestBody Book book) {
+    log.debug("Received request to update book with id {}", id);
     bookService.updateBook(id, book);
     return ResponseEntity.ok().build();
   }

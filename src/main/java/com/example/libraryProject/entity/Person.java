@@ -1,11 +1,6 @@
 package com.example.libraryProject.entity;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +32,9 @@ public class Person {
   private String role;
   private LocalDateTime createdAt;
   private LocalDateTime removedAt;
-  private String createdPerson;
+
+  @ManyToOne
+  private Person createdPerson;
   private String removedPerson;
 
   @OneToMany(mappedBy = "owner")

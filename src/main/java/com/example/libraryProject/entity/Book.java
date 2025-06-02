@@ -38,11 +38,13 @@ public class Book {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private LocalDateTime removedAt;
-  private String createdPerson;
+
+  @ManyToOne
+  private Person createdPerson;
   private String updatedPerson;
   private String removedPerson;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne
   @JoinColumn(name = "owner_id")
   private Person owner;
 }

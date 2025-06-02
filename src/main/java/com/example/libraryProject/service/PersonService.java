@@ -32,7 +32,8 @@ public class PersonService {
     if (personRepository.findByName(person.getName()).isPresent()) {
       throw new UserAlreadyExistsException("User with the same details already exists");
     }
-    person.setPassword(passwordEncoder.encode(person.getPassword()));
+    String encodedPassword = passwordEncoder.encode(person.getPassword());
+    person.setPassword(encodedPassword);
     personRepository.save(person);
   }
 

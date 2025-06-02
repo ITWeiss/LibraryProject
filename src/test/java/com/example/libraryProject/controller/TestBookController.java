@@ -30,7 +30,7 @@ public class TestBookController extends PostgresDbTestcontainers {
   @DisplayName("Получение всех книг")
   void testGetAllBooks() {
 
-    ResponseEntity<Book[]> books = restTemplate.getForEntity(
+    var books = restTemplate.getForEntity(
         "http://localhost:8080/books",
         Book[].class
     );

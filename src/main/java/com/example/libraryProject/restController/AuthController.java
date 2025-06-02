@@ -34,8 +34,8 @@ public class AuthController {
    */
   @PostMapping("/login")
   public ResponseEntity<Person> login(Person person) {
-    Person dbPerson = userService.getUser(person);
-    return ResponseEntity.ok(dbPerson);
+    person = userService.getUser(person);
+    return ResponseEntity.ok(person);
   }
 
 }
